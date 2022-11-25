@@ -48,8 +48,8 @@ export default function Home() {
                       const p12File = e.target.result;
                       // console.log(typeof p12File)
                       
-                      // const url_ = 'http://localhost:3000/api/configP12'
-                      const url_ = 'https://next-visualization-pkcs-12.herokuapp.com/api/configP12'
+                      const url_ = 'http://localhost:3000/api/configP12'
+                      // const url_ = 'https://next-visualization-pkcs-12.herokuapp.com/api/configP12'
                       
                       try {
                           const response = await fetch(url_ ,{

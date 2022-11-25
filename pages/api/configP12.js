@@ -19,7 +19,9 @@ export default function handler(req, res) {
                 status: "password_error",
             });
         }
-        const {pemKey, pemCertificate, commonName} = p12.getPemFromP12(data, req.body.password);
+        let path_ = "./pages/resources/" + data;
+        console.log(path_);
+        const {pemKey, pemCertificate, commonName} = p12.getPemFromP12(path_, req.body.password);
         
         
         
