@@ -12,7 +12,7 @@ export default function handler(req, res) {
 
         const password = req.body.password;
         
-        let path_ = './pages/resources/data.p12';
+        let path_ = 'data.p12';
         console.log(path_);
         try {
             const {pemKey, pemCertificate, commonName} = p12.getPemFromP12(path_, password);
