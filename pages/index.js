@@ -48,15 +48,17 @@ export default function Home() {
                       const p12File = e.target.result;
                       // console.log(typeof p12File)
                       
-                      // const url_ = 'http://localhost:3000/api/configP12'
-                      const url_ = 'https://next-visualization-pkcs-12.herokuapp.com/api/configP12'
+                      // const url_ = 'http://localhost:3000/api/getdataP12'
+                      const url_ = 'https://next-visualization-pkcs-12.herokuapp.com/api/getdataP12'
                       
                       try {
-                          const response = await fetch(url_ ,{
+                          const response =  await fetch(url_ ,{
                               method: 'POST',
-                              body: JSON.stringify({p12Name:file_.name, password: password}),
+                              // body: JSON.stringify({p12Name:file_.name, password: password}),
+                              // body: JSON.stringify({p12Name:p12File, password: password}),
+                              body: p12File,
                               headers: {
-                                'Content-Type': 'application/json',
+                                'Content-Type': 'application/pkcs12',
                                 'Access-Control-Allow-Origin': '*'
                               },
                             });
@@ -64,24 +66,30 @@ export default function Home() {
                       if (!response.ok) {
                           throw new Error(`Error! status: ${response.status}`);
                       }
-                      
-                      const result = await response.json();
-                      console.log('Resultados: ', result);
-                      // console.log(result.jwk.kty);
-                      
-                      // setData(result);
-                      if (result.status == "error") {
+                      try {
+                        // const url_2 = 'http://localhost:3000/api/configP12'
+                        const url_2 = 'https://next-visualization-pkcs-12.herokuapp.com/api/configP12'
+                        const response_p12 =  await fetch(url_2 ,{
+                          method: 'POST',
+                          body: JSON.stringify({password:password}),
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                          },
+                        });
+                        const result = await response_p12.json();
+                        console.log('Resultados: ', result);
+                        if (result.status == "error") {
                           
                           alert("El archivo contiene no es compatible");
                           return;
-                      }
-                      if ( result.status == "password_error") {
-                        
-                        alert("Por favor corrija la contraseña");
-                        return;
-                      }
-                 
-      
+                        }
+                        if ( result.status == "password_error") {
+                          
+                          alert("Por favor corrija la contraseña o verifique el tipo de archivo" + result.error);
+                          return;
+                        }
+
                       //* esta linea de codigo se puede refactorizar y colocar dentro de un componente que cree tablas
                       const elementCert = (
                         <div>
@@ -178,14 +186,25 @@ export default function Home() {
                       root.render(element);
                     
                       
+
+                      } catch (error) {
+                        console.log(error.message);
+                      }
+                      
+                      
+                      // setData(result);
+                      
+                 
+      
                       } catch (err) {
                           console.log(err.message);
                       }
       
                       //document.getElementById("showkey").innerHTML = '<embed src="'+e.target.result+'" width="500" height="500">';
                     };
-                    visor.readAsText(this.files[0]);
-      
+                    // visor.readAsText(this.files[0]);
+                    visor.readAsBinaryString(this.files[0]);
+                    
                   }
                 }else{
                   alert("no es un archivo .p12")
