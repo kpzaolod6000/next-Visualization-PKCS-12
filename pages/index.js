@@ -206,18 +206,18 @@ export default function Home() {
     else{
         alert("Por favor primeramente ingrese la contraseña correctamente")
     }
-    
-    if(path === "/limpiar" && isExist == true){
-      let element = document.getElementById(id);
-      let element2 = document.getElementById("showcert");
-      //element.remove();
-      element.innerHTML = "";
-      element2.innerHTML = "";
-      setExist(false);
-      console.log("ELIMINADO")
-    }
   }
-
+  const handleClear = (e, path,id="") => {
+    if(path === "/limpiar" && isExist == true){
+        let element = document.getElementById(id);
+        let element2 = document.getElementById("showcert");
+        //element.remove();
+        element.innerHTML = "";
+        element2.innerHTML = "";
+        setExist(false);
+        console.log("ELIMINADO")
+    }
+    }
   return (
       
     <div className={styles.container}>
@@ -260,7 +260,7 @@ export default function Home() {
         <div className={styles.main_button} id="main_button_veri">
           <div id="circle"></div>
           <Link href="/" legacyBehavior>
-            <a onClick={(e) => handleClick(e, "/limpiar", "showkey")} className={styles.textcolor} >Limpiar Todo</a>
+            <a onClick={(e) => handleClear(e, "/limpiar", "showkey")} className={styles.textcolor} >Limpiar Todo</a>
           </Link>
         </div>
 
