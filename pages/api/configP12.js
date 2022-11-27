@@ -46,7 +46,7 @@ export default function handler(req, res) {
             cert.cert.subject.attributes.forEach(element => {
                
                if (element.shortName == 'CN') {
-                    nameIssuer = element.value;
+                    nameSubject = element.value;
                } 
             });
 
