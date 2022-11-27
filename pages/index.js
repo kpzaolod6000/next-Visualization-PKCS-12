@@ -48,8 +48,8 @@ export default function Home() {
                       const p12File = e.target.result;
                       // console.log(typeof p12File)
                       
-                      const url_ = 'http://localhost:3000/api/getdataP12'
-                      // const url_ = 'https://next-visualization-pkcs-12.herokuapp.com/api/getdataP12'
+                      // const url_ = 'http://localhost:3000/api/getdataP12'
+                      const url_ = 'https://next-visualization-pkcs-12.herokuapp.com/api/getdataP12'
                       
                       try {
                           const response =  await fetch(url_ ,{
@@ -70,8 +70,8 @@ export default function Home() {
                       console.log('pkcs12: ', pkcs12Asn1);
 
                       try {
-                        const url_2 = 'http://localhost:3000/api/configP12'
-                        // const url_2 = 'https://next-visualization-pkcs-12.herokuapp.com/api/configP12'
+                        // const url_2 = 'http://localhost:3000/api/configP12'
+                        const url_2 = 'https://next-visualization-pkcs-12.herokuapp.com/api/configP12'
                         const response_p12 =  await fetch(url_2 ,{
                           method: 'POST',
                           body: JSON.stringify({password:password , pkcs12Asn1: pkcs12Asn1}),
