@@ -48,8 +48,8 @@ export default function Home() {
                       const p12File = e.target.result;
                       // console.log(typeof p12File)
                       
-                      // const url_ = 'http://localhost:3000/api/getdataP12'
-                      const url_ = 'https://next-visualization-pkcs-12.herokuapp.com/api/getdataP12'
+                      const url_ = 'http://localhost:3000/api/getdataP12'
+                      // const url_ = 'https://next-visualization-pkcs-12.herokuapp.com/api/getdataP12'
                       
                       try {
                           const response =  await fetch(url_ ,{
@@ -66,12 +66,15 @@ export default function Home() {
                       if (!response.ok) {
                           throw new Error(`Error! status: ${response.status}`);
                       }
+                      const pkcs12Asn1 = await response.json();
+                      console.log('pkcs12: ', pkcs12Asn1);
+
                       try {
-                        // const url_2 = 'http://localhost:3000/api/configP12'
-                        const url_2 = 'https://next-visualization-pkcs-12.herokuapp.com/api/configP12'
+                        const url_2 = 'http://localhost:3000/api/configP12'
+                        // const url_2 = 'https://next-visualization-pkcs-12.herokuapp.com/api/configP12'
                         const response_p12 =  await fetch(url_2 ,{
                           method: 'POST',
-                          body: JSON.stringify({password:password}),
+                          body: JSON.stringify({password:password , pkcs12Asn1: pkcs12Asn1}),
                           headers: {
                             'Content-Type': 'application/json',
                             'Access-Control-Allow-Origin': '*'
@@ -90,7 +93,7 @@ export default function Home() {
                           return;
                         }
 
-                      //* esta linea de codigo se puede refactorizar y colocar dentro de un componente que cree tablas
+                      // //* esta linea de codigo se puede refactorizar y colocar dentro de un componente que cree tablas
                       const elementCert = (
                         <div>
                           <h3>Campos del Certificado del archivo {file_.name}</h3>
@@ -113,23 +116,23 @@ export default function Home() {
                             </tr>
                             <tr>
                               <td>Periodo de validez: </td>
-                              <td>{result.certificate.valid_from} - {result.certificate.valid_to}</td>
+                              <td>{result.valid_from} - {result.valid_to}</td>
                             </tr>
                             <tr>
-                              <td>Modulus: </td>
-                              <td>{result.certificate.modulus}</td>
+                              <td>Algoritmo MD: </td>
+                              <td>{result.algorithmModulus}</td>
                             </tr>
                             <tr>
-                              <td>Nro de bits: </td>
-                              <td>{result.certificate.bits}</td>
+                              <td>OID de la firma digital: </td>
+                              <td>{result.signatureOid}</td>
                             </tr>
                             <tr>
                               <td>Nro de Serial: </td>
-                              <td>{result.certificate.serialNumber}</td>
+                              <td>{result.serialNumber}</td>
                             </tr>
                             <tr>
-                              <td>Fingerprint: </td>
-                              <td>{result.certificate.fingerprint}</td>
+                              <td>Signature: </td>
+                              <td>{result.signature}</td>
                             </tr>
                           </table>
                         </div>
@@ -144,39 +147,57 @@ export default function Home() {
                           <table className={styles.table_bordered}>
                             <tr>
                               <th>Clave</th>
-                              <th>Contenido</th>
+                              <th>data</th>
+                              <th>t</th>
+                              <th>s</th>
                             </tr>
                             <tr>
                               <td>modulus: </td>
-                              <td>{result.privatekey.n}</td>
+                              <td>{result.n.data}</td>
+                              <td>{result.n.t}</td>
+                              <td>{result.n.s}</td>
                             </tr>
                             <tr>
                               <td>publicExponent: </td>
-                              <td>{result.privatekey.e}</td>
+                              <td>{result.e.data}</td>
+                              <td>{result.e.t}</td>
+                              <td>{result.e.s}</td>
                             </tr>
                             <tr>
                               <td>privateExponent: </td>
-                              <td>{result.privatekey.d}</td>
+                              <td>{result.d.data}</td>
+                              <td>{result.d.t}</td>
+                              <td>{result.d.s}</td>
                             </tr>
                             <tr>
                               <td>prime1: </td>
-                              <td>{result.privatekey.p}</td>
+                              <td>{result.p.data}</td>
+                              <td>{result.p.t}</td>
+                              <td>{result.p.s}</td>
                             </tr>
                             <tr>
                               <td>prime2: </td>
-                              <td>{result.privatekey.q}</td>
+                              <td>{result.q.data}</td>
+                              <td>{result.q.t}</td>
+                              <td>{result.q.s}</td>
                             </tr>
                             <tr>
                               <td>exponent1: </td>
-                              <td>{result.privatekey.dp}</td>
+                              <td>{result.DP.data}</td>
+                              <td>{result.DP.t}</td>
+                              <td>{result.DP.s}</td>
                             </tr>
                             <tr>
                               <td>exponent2: </td>
-                              <td>{result.privatekey.dq}</td>
+                              <td>{result.DQ.data}</td>
+                              <td>{result.DQ.t}</td>
+                              <td>{result.DQ.s}</td>
                             </tr>
                             <tr>
                               <td>coefficient: </td>
-                              <td>{result.privatekey.qi}</td>
+                              <td>{result.qInv.data}</td>
+                              <td>{result.qInv.t}</td>
+                              <td>{result.qInv.s}</td>
                             </tr>
                           </table>
                         </div>
@@ -193,8 +214,7 @@ export default function Home() {
                       
                       
                       // setData(result);
-                      
-                 
+                  
       
                       } catch (err) {
                           console.log(err.message);
@@ -214,6 +234,8 @@ export default function Home() {
                 // txt += "name: " + file.name + "<br>";
                 // txt += "type: " + file.type + "<br>";
               }
+              
+              document.getElementById(id).value = "";
               // document.getElementById("showkey").innerHTML = txt;
             }
       

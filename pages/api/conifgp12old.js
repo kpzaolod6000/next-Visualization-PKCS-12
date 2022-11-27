@@ -1,3 +1,8 @@
+
+const p12 = require('p12-pem');
+const fs = require('fs');
+const {X509Certificate} = require('crypto')
+const pem2jwk = require('pem-jwk').pem2jwk
 const forge = require('node-forge');
 
 export default function handler(req, res) {
@@ -17,7 +22,7 @@ export default function handler(req, res) {
             // console.log(key);
 
             
-            var privateKey = {};
+            var privateKey;
             for(var sci = 0; sci < pkcs12.safeContents.length; ++sci) {
                 var safeContents = pkcs12.safeContents[sci];
             
@@ -68,21 +73,83 @@ export default function handler(req, res) {
             var signatureOid = cert.cert.signatureOid;
             
             
-            // console.log(privateKey);
-            const n = privateKey.n;
-            const e = privateKey.e;
-            const d = privateKey.d;
-            const p = privateKey.p;
-            const q = privateKey.q;
-            const dP = privateKey.dP;
-            const dQ = privateKey.dQ;
-            const qInv = privateKey.qInv;
+            console.log(privateKey);
 
+            
+            // const nameIssuer = cert.cert.issuer.attributes[cert.cert.issuer.attributes.length - 1].value
+            // // const nameSubject
+            // console.log(cert.cert.subject.attributes);
+        
+        
+        // let path_ = 'data.p12';
+        // console.log(path_);
+        // try {
+        //     const {pemKey, pemCertificate, commonName} = p12.getPemFromP12(path_, password);
+        //     // console.log(pemCertificate.toString("base64"));
+        //     // console.log(pemKey.toString("base64"));
+
+        //         // //** for certificate */
+        //     const begincer = pemCertificate.slice(0,27);
+        //     const endincer = pemCertificate.slice(pemCertificate.length -25,pemCertificate.length);
+        //     const midlecer = pemCertificate.slice(27,pemCertificate.length -25);
+        //     const pemCertificatevalid = begincer+"\n"+midlecer+"\n"+endincer;
+
+        //     const x509list = new X509Certificate(pemCertificatevalid);
+        //     const objectCert = x509list.toLegacyObject();
+
+        //     const typeKey = x509list.publicKey.type
+        //     //nombre comun
+        //     const inToremove = "CN="
+
+        //     // read issuer's data
+        //     const listNameIssuer = objectCert.issuer
+        //     //console.log(listNameIssuer)
+            
+        //     let nameIssuer = ""
+        //     listNameIssuer.split(/\n/).forEach(function(listname){
+        //         if (listname.includes(inToremove)) {
+        //             nameIssuer = listname.replaceAll(inToremove, "");
+        //         }
+        //     });
+
+        //     const inToremove_subject = "CN="
+
+        //     // read issuer's data
+        //     const listNameSubject = objectCert.subject
+        //     //console.log(listNameIssuer)
+            
+        //     let nameSubject = ""
+        //     listNameSubject.split(/\n/).forEach(function(listname){
+        //         if (listname.includes(inToremove_subject)) {
+        //             nameSubject = listname.replaceAll(inToremove_subject, "");
+        //         }
+        //     });
+        //     // console.log(objectCert);
+            
+        //     //** for private key */
+
+        //     const beginkey = pemKey.slice(0,31)
+        //     const endkey = pemKey.slice(pemKey.length -29,pemKey.length)
+        //     const midkey = pemKey.slice(31,pemKey.length-29)
+        //     const pemKeyvalid = beginkey+"\n"+midkey+"\n"+endkey
+
+        //     const jwkPrivateKey = pem2jwk(pemKeyvalid);
+        
+        //     // console.log(jwkPublic);
+
+        // res.status(200).json({ 
+        //     status: "good",
+        //     certificate: objectCert,
+        //     privatekey: jwkPrivateKey,
+        //     typeKey: typeKey,
+        //     nameIssuer: nameIssuer,
+        //     nameSubject: nameSubject
+        // });
 
             res.status(200).json({ 
                 status: "good",
-                nameSubject: nameSubject,
-                nameIssuer: nameIssuer,
+                nameSubject:nameSubject,
+                nameIssuer:nameIssuer,
                 typeKey: typeKey,
                 valid_from: valid_from,
                 valid_to: valid_to,
@@ -90,14 +157,8 @@ export default function handler(req, res) {
                 signature: signature,
                 serialNumber: serialNumber,
                 signatureOid: signatureOid,   
-                n: n,
-                e: e,
-                d: d,
-                p: p,
-                q: q,
-                DP: dP,
-                DQ: dQ,
-                qInv: qInv
+                // privateKey: privateKey
+            
             });
 
         } catch (error) {
